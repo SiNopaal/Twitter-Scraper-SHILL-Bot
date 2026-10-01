@@ -598,8 +598,8 @@ async def run_campaign_pipeline(cycle_num: int = 1):
     print(f"╚═══════════════════════════════════════════════════════════════╝{RESET}\n")
 
 
-async def run_continuous_campaign(min_delay_minutes: int = 10, max_delay_minutes: int = 20):
-    """Menjalankan seluruh siklus kampanye secara terus-menerus dengan jeda acak 10-20 menit antar siklus."""
+async def run_continuous_campaign(min_delay_minutes: int = 5, max_delay_minutes: int = 10):
+    """Menjalankan seluruh siklus kampanye secara terus-menerus dengan jeda acak 5-10 menit antar siklus."""
     cycle = 1
     while True:
         print(f"\n{MAGENTA}{BOLD}╔═══════════════════════════════════════════════════════════════╗{RESET}")
@@ -608,7 +608,7 @@ async def run_continuous_campaign(min_delay_minutes: int = 10, max_delay_minutes
 
         await run_campaign_pipeline(cycle_num=cycle)
 
-        # Hitung jeda acak antar siklus (10 hingga 20 menit)
+        # Hitung jeda acak antar siklus (5 hingga 10 menit)
         cycle_delay_seconds = random.randint(min_delay_minutes * 60, max_delay_minutes * 60)
         delay_minutes_display = cycle_delay_seconds / 60
 
@@ -639,5 +639,5 @@ async def run_continuous_campaign(min_delay_minutes: int = 10, max_delay_minutes
 
 
 if __name__ == "__main__":
-    asyncio.run(run_continuous_campaign(min_delay_minutes=10, max_delay_minutes=20))
+    asyncio.run(run_continuous_campaign(min_delay_minutes=5, max_delay_minutes=10))
 
