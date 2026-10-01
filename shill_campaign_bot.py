@@ -47,52 +47,52 @@ URL = "https://shill.money/clock-in"
 
 # 8 Postingan 100% Unik & Berbeda Sudut Pandang per Akun
 POST_TEMPLATES = [
+    # Akun 1: Gaya Analitik & Metrik Leaderboard
     (
-        "Posts score highest when including complete identifiers (ticker, contract, and media), "
-        "while scaling further through real discussion—like quotes and replies—plus transparent payout proofs.\n"
-        f"{TAG}\n\n"
+        "Scoring breakdown for SocialFi: complete identifiers paired with real squad engagement "
+        "consistently achieve the strongest multiplier proofs on-chain. Validating today's hours with @shillmoneyrh!\n\n"
         f"Contract Address {TICKER}: {CA}"
     ),
+    # Akun 2: Gaya Degen Web3 Shift Check-In
     (
-        "Social mining in Web3 done right. Real discussion, mutual squad quotes, and transparent creator paychecks beat passive spam.\n"
-        f"Clocking in my shift at {URL}!\n\n"
-        f"{TAG}\n"
+        f"Clocked in and ready to work. Web3 attention mining is replacing passive farming—pure measurable engagement on-chain.\n"
+        f"Shift live at {URL}! @shillmoneyrh\n\n"
         f"Contract Address {TICKER}: {CA}"
     ),
+    # Akun 3: Gaya Komunitas Anti-Bot & Proof of Work
     (
-        "Daily clock-in shift confirmed! Tracking every like, reply, repost, and quote on-chain.\n"
-        f"Turn genuine reach into liquid yield at {URL}.\n\n"
-        f"{TAG}\n"
+        "Bot spam gets zero reach. Genuine replies and mutual quotes always dominate the algorithm.\n"
+        "Validated proof-of-work entry for today's hours with @shillmoneyrh. Real social mining wins!\n\n"
         f"Contract Address {TICKER}: {CA}"
     ),
+    # Akun 4: Gaya Transparansi Smart Contract & Wage Ledger
     (
-        "Proof of Work meets SocialFi. The scoring algorithm rewards high-effort discussions and complete CA identifiers.\n"
-        f"Securing my daily {TICKER} paycheck!\n\n"
-        f"{TAG}\n"
+        "Transparent wage distribution backed directly by verifiable smart contracts.\n"
+        "Checking my daily clock-in badge and securing my allocation on @shillmoneyrh!\n\n"
         f"Contract Address {TICKER}: {CA}"
     ),
+    # Akun 5: Gaya Creator Economy & Payout Multiplier
     (
-        "Clock in, participate in authentic conversations, and claim your decentralized creator rewards.\n"
-        f"Checking in my daily shift at {URL}!\n\n"
-        f"{TAG}\n"
+        "The creator economy is shifting to decentralized proof-of-contribution.\n"
+        "Every quote, discussion, and like translates directly into earned yield on @shillmoneyrh.\n\n"
         f"Contract Address {TICKER}: {CA}"
     ),
+    # Akun 6: Gaya Bullish Momentum & High Effort Social Mining
     (
-        "Why grind mindless farming when you can clock in with real discussion and get paid for measurable reach?\n"
-        f"Squad shift active at {URL}!\n\n"
-        f"{TAG}\n"
+        "Proof of Work SocialFi is gaining serious traction. High effort threads with complete CA identifiers get prioritized by the scoring contract @shillmoneyrh.\n"
+        "Let's push this reach! 🚀\n\n"
         f"Contract Address {TICKER}: {CA}"
     ),
+    # Akun 7: Gaya Daily Shift Routine & Leaderboard Climb
     (
-        "Decentralized wage distribution powered by smart contracts. Daily shift is officially open for creators.\n"
-        "Every quote & repost counts!\n\n"
-        f"{TAG}\n"
+        f"Another day, another verified shift on the books. Don't sleep on clocking in daily at {URL}!\n"
+        "Verified operator shift active with @shillmoneyrh.\n\n"
         f"Contract Address {TICKER}: {CA}"
     ),
+    # Akun 8: Gaya Tokenomics & Attention Economy Architecture
     (
-        f"Consistency is king in SocialFi. Just clocked in my daily shift on {URL}!\n"
-        "Squad is active and pushing transparent creator rewards.\n\n"
-        f"{TAG}\n"
+        "Decentralized attention economics in action: turning organic community discussions into liquid on-chain yield.\n"
+        "Fully locked in with @shillmoneyrh.\n\n"
         f"Contract Address {TICKER}: {CA}"
     )
 ]
@@ -248,22 +248,30 @@ async def post_shill_tweet(
                 break
             await asyncio.sleep(0.5)
 
-        if await send_btn.is_enabled():
-            print(f"  {YELLOW}🚀 Mengirim tweet ke timeline...{RESET}", flush=True)
-            try:
-                await send_btn.dispatch_event("click")
-            except Exception:
-                await send_btn.click(force=True)
-        else:
-            print(f"  {YELLOW}🚀 Mengirim via Ctrl+Enter...{RESET}", flush=True)
-            await textarea.focus()
-            await page.keyboard.press("Control+Enter")
+        print(f"  {YELLOW}🚀 Mengirim tweet ke timeline...{RESET}", flush=True)
+        try:
+            async with page.expect_response(lambda r: "CreateTweet" in r.url, timeout=20000) as resp_info:
+                if await send_btn.is_enabled():
+                    try:
+                        await send_btn.dispatch_event("click")
+                    except Exception:
+                        await send_btn.click(force=True)
+                else:
+                    await textarea.focus()
+                    await page.keyboard.press("Control+Enter")
 
-        # Tunggu konfirmasi CreateTweet
-        for _ in range(15):
-            if created_tweet_id:
-                break
-            await asyncio.sleep(1.0)
+            resp = await resp_info.value
+            raw_text = await resp.text()
+            m = re.search(r'"rest_id"\s*:\s*"(\d+)"', raw_text)
+            if m:
+                created_tweet_id = m.group(1)
+            else:
+                res_json = json.loads(raw_text)
+                res = res_json.get("data", {}).get("create_tweet", {}).get("tweet_results", {}).get("result", {})
+                if res and res.get("rest_id"):
+                    created_tweet_id = res.get("rest_id")
+        except Exception as e:
+            print(f"  {YELLOW}Notice CreateTweet network capture: {e}{RESET}", flush=True)
 
         if not created_tweet_id:
             # Fallback 1: Cek toast popup
@@ -277,7 +285,7 @@ async def post_shill_tweet(
                 pass
 
         if not created_tweet_id:
-            # Fallback 2: Buka profile untuk cek tweet teratas yang mengandung $SHILL
+            # Fallback 2: Buka profile untuk cek tweet teratas yang mengandung $SHILL (abaikan pinned tweet!)
             try:
                 print(f"  {YELLOW}Memverifikasi tweet terbaru di profil @{account_name}...{RESET}", flush=True)
                 await page.goto(f"https://x.com/{account_name}", wait_until="domcontentloaded", timeout=25000)
@@ -285,6 +293,8 @@ async def post_shill_tweet(
                 tweets = await page.locator('article[data-testid="tweet"]').all()
                 for tw in tweets[:5]:
                     text_content = await tw.inner_text()
+                    if "Pinned" in text_content or "Disematkan" in text_content:
+                        continue
                     if "$SHILL" in text_content or "0x93cf" in text_content:
                         link_el = tw.locator('a[href*="/status/"]').first
                         if await link_el.count() > 0:
