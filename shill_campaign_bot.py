@@ -45,29 +45,36 @@ CA = "0x93cfF6Dc0cf59680b8d85b9F3312a24bF1a7c1D8"
 TAG = "@shillmoneyrh"
 URL = "https://shill.money/clock-in"
 
-# Generator Postingan Bebas, Organik & Unik per Akun
+# Generator Postingan Bebas, Organik & Unik per Akun (100% Kualifikasi Shill.Money)
 def generate_unique_post_text(account_name: str = "", cycle_num: int = 1) -> str:
     """Menghasilkan teks postingan yang bebas, organik, dan unik untuk setiap akun,
     dengan wajib menyertakan tag @shillmoneyrh dan diakhiri Contract Address $SHILL: 0x93cfF6Dc0cf59680b8d85b9F3312a24bF1a7c1D8."""
     openers = [
+        # Angle Degen & SocialFi Mining
         "SocialFi is entering an exciting new meta.",
         "Grinding out another high-effort shift today.",
         "Authentic CT discussions beat passive bot farming every single time.",
         "The decentralized attention economy is officially here.",
-        "Consistency is everything when scaling your leaderboard score.",
         "Proof of Work meets decentralized creator paychecks.",
         "Turning genuine reach and meaningful engagement into liquid yield.",
         "Smart contracts don't lie—transparent wage distribution for real creators.",
-        "Why waste energy on mindless farming when you can get rewarded for real discussion?",
+        "Why waste energy on mindless airdrop farming when you can get paid for real discussion?",
         "Squad is fully locked in and scaling on-chain multipliers today.",
         "Logging verified hours on-chain with proof of contribution.",
         "Web3 monetization done right: direct creator rewards based on actual reach.",
         "Quality engagement always wins over automated spam.",
         "Another daily shift active—maximizing proof-of-work multipliers.",
-        "Decentralized attention mining is the cleanest way to earn in SocialFi."
+        "Decentralized attention mining is the cleanest way to earn in SocialFi.",
+        "Proof-of-work social mining is completely reshaping creator incentives.",
+        "Not all engagement is created equal—authentic reach is the real alpha.",
+        "Clocking in daily because consistency is the fastest way up the leaderboard.",
+        "Trading my daily attention and discussions for transparent on-chain rewards.",
+        "Real discussions, verified hours, and measurable community reach.",
+        "The shift is active and creator rewards are running on smart contracts."
     ]
 
     contexts = [
+        # Konten & Kualifikasi Spesifik Shill.Money
         f"Real squad quotes, insightful replies, and organic interaction drive the highest points {TAG}.",
         f"Complete identifiers paired with visual shift badges guarantee maximum scoring weight {TAG}.",
         f"The math behind the payout mechanics rewards value creators over low-effort noise {TAG}.",
@@ -76,7 +83,11 @@ def generate_unique_post_text(account_name: str = "", cycle_num: int = 1) -> str
         f"Mutual quotes and thread discussions scaling up our yield multipliers nicely {TAG}.",
         f"Checking my daily shift badge and securing my creator allocation {TAG}.",
         f"Active discussions and high effort content get prioritized by the algorithm {TAG}.",
-        f"Turning organic CT reach into verifiable payout proofs with {TAG}."
+        f"Turning organic CT reach into verifiable payout proofs with {TAG}.",
+        f"High effort threads with graphic proofs unlock top-tier attention multipliers on {TAG}.",
+        f"Direct creator monetization without middlemen or opaque ad revenue cuts {TAG}.",
+        f"Logged in my hours on the ledger—tracking every like, repost, and quote via {TAG}.",
+        f"Squad coordination pushing liquid reward pools directly to creators {TAG}."
     ]
 
     ctas = [
@@ -85,10 +96,12 @@ def generate_unique_post_text(account_name: str = "", cycle_num: int = 1) -> str
         f"Squad clocked in. Let's work! 🔥",
         f"Check in your hours at {URL}. LFG! ⚡",
         f"Verified shift active. Let's get it! 💎",
-        f"Logged in and working with the squad! 📈"
+        f"Logged in and working with the squad! 📈",
+        f"Ready for today's payout distribution! ✨",
+        f"Clocking in daily and climbing the ranks! 🎯"
     ]
 
-    for _ in range(25):
+    for _ in range(30):
         op = random.choice(openers)
         ctx = random.choice(contexts)
         cta = random.choice(ctas)
@@ -105,7 +118,6 @@ def generate_unique_post_text(account_name: str = "", cycle_num: int = 1) -> str
         if len(final_post) <= 270:
             return final_post
 
-    # Fallback jika panjang
     return f"{op} {ctx}\n\nContract Address {TICKER}: {CA}"
 
 
