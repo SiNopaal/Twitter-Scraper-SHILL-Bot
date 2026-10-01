@@ -598,8 +598,8 @@ async def run_campaign_pipeline(cycle_num: int = 1):
     print(f"╚═══════════════════════════════════════════════════════════════╝{RESET}\n")
 
 
-async def run_continuous_campaign(cycle_delay_seconds: int = 1800):
-    """Menjalankan seluruh siklus kampanye secara terus-menerus dengan jeda 30 menit antar siklus."""
+async def run_continuous_campaign(min_delay_minutes: int = 10, max_delay_minutes: int = 20):
+    """Menjalankan seluruh siklus kampanye secara terus-menerus dengan jeda acak 10-20 menit antar siklus."""
     cycle = 1
     while True:
         print(f"\n{MAGENTA}{BOLD}╔═══════════════════════════════════════════════════════════════╗{RESET}")
@@ -608,9 +608,13 @@ async def run_continuous_campaign(cycle_delay_seconds: int = 1800):
 
         await run_campaign_pipeline(cycle_num=cycle)
 
+        # Hitung jeda acak antar siklus (10 hingga 20 menit)
+        cycle_delay_seconds = random.randint(min_delay_minutes * 60, max_delay_minutes * 60)
+        delay_minutes_display = cycle_delay_seconds / 60
+
         print(f"\n{YELLOW}{BOLD}================================================================{RESET}")
         print(f"{YELLOW}{BOLD}⏳ SIKLUS #{cycle} SELESAI SEMPURNA!{RESET}")
-        print(f"{YELLOW}{BOLD}💤 Memulai jeda istirahat siklus selama 30 MENIT ({cycle_delay_seconds} detik)...{RESET}")
+        print(f"{YELLOW}{BOLD}💤 Memulai jeda istirahat siklus selama {delay_minutes_display:.1f} MENIT ({cycle_delay_seconds} detik)...{RESET}")
         print(f"{YELLOW}{BOLD}================================================================{RESET}\n")
 
         # Arsipkan postingan siklus ini dan bersihkan untuk siklus berikutnya
@@ -624,15 +628,16 @@ async def run_continuous_campaign(cycle_delay_seconds: int = 1800):
                 pass
             save_campaign_posts({})
 
-        # Hitung mundur jeda 30 menit
+        # Hitung mundur jeda siklus
         for remaining in range(cycle_delay_seconds, 0, -60):
             mins = remaining // 60
             if mins % 5 == 0 or mins <= 3:
                 print(f"  [Sleep Timer] Sisa jeda siklus: {mins} menit menuju Siklus #{cycle + 1}...", flush=True)
-            await asyncio.sleep(60)
+            await asyncio.sleep(min(60, remaining))
 
         cycle += 1
 
 
 if __name__ == "__main__":
-    asyncio.run(run_continuous_campaign(cycle_delay_seconds=1800))
+    asyncio.run(run_continuous_campaign(min_delay_minutes=10, max_delay_minutes=20))
+
