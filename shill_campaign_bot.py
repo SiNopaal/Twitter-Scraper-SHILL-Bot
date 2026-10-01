@@ -167,10 +167,15 @@ async def post_shill_tweet(
         nonlocal created_tweet_id
         if "CreateTweet" in response.url:
             try:
-                res_json = await response.json()
-                res = res_json.get("data", {}).get("create_tweet", {}).get("tweet_results", {}).get("result", {})
-                if res:
-                    created_tweet_id = res.get("rest_id")
+                raw_text = await response.text()
+                m = re.search(r'"rest_id"\s*:\s*"(\d+)"', raw_text)
+                if m:
+                    created_tweet_id = m.group(1)
+                else:
+                    res_json = json.loads(raw_text)
+                    res = res_json.get("data", {}).get("create_tweet", {}).get("tweet_results", {}).get("result", {})
+                    if res and res.get("rest_id"):
+                        created_tweet_id = res.get("rest_id")
             except Exception:
                 pass
 
@@ -194,19 +199,23 @@ async def post_shill_tweet(
         except Exception:
             pass
 
+        # Target dialog modal jika ada, atau fallback ke root page
+        dialog = page.locator('div[role="dialog"]').first
+        target_container = dialog if await dialog.count() > 0 else page
+
         # Tunggu textarea komposer muncul
-        textarea = page.locator('[data-testid="tweetTextarea_0"]').first
+        textarea = target_container.locator('[data-testid="tweetTextarea_0"]').first
         await textarea.wait_for(state="visible", timeout=20000)
 
         # 1. Upload Gambar jika ada
         if image_path and Path(image_path).exists():
             print(f"  {YELLOW}🖼️  Mengunggah gambar grafis $SHILL: {Path(image_path).name}...{RESET}", flush=True)
-            file_input = page.locator('input[data-testid="fileInput"]').first
+            file_input = target_container.locator('input[data-testid="fileInput"]').first
             if await file_input.count() > 0:
                 await file_input.set_input_files(image_path)
                 # Tunggu preview gambar termuat
                 try:
-                    await page.locator('[data-testid="attachments"]').wait_for(state="visible", timeout=15000)
+                    await target_container.locator('[data-testid="attachments"]').wait_for(state="visible", timeout=15000)
                     print(f"  {GREEN}✓ Gambar berhasil terunggah dan terlampir!{RESET}", flush=True)
                 except Exception:
                     print(f"  {YELLOW}Notice: Preview lampiran sedang diproses...{RESET}", flush=True)
@@ -229,8 +238,8 @@ async def post_shill_tweet(
         await page.keyboard.press("Escape")
         await asyncio.sleep(0.8)
 
-        # 3. Klik Tombol Kirim / Post
-        send_btn = page.locator('[data-testid="tweetButton"]').first
+        # 3. Klik Tombol Kirim / Post di dalam dialog
+        send_btn = target_container.locator('[data-testid="tweetButton"]').first
         await send_btn.wait_for(state="visible", timeout=10000)
 
         for _ in range(15):
@@ -240,7 +249,7 @@ async def post_shill_tweet(
 
         if await send_btn.is_enabled():
             print(f"  {YELLOW}🚀 Mengirim tweet ke timeline...{RESET}", flush=True)
-            await send_btn.click(force=True)
+            await send_btn.click()
         else:
             print(f"  {YELLOW}🚀 Mengirim via Ctrl+Enter...{RESET}", flush=True)
             await page.keyboard.press("Control+Enter")
