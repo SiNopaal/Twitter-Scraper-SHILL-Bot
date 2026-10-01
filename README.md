@@ -35,11 +35,11 @@ Dirancang untuk memaksimalkan perolehan poin leaderboard secara organik dan terk
   - 🔁 **Retweet / Repost** (+3 Poin)
   - 💬 **Contextual Reply / Komentar Kontekstual** (+2 Poin)
 
-### 4. ⏱️ Looping Terjadwal Kontinu (Jeda Acak 5–10 Menit Antar Siklus)
+### 4. ⏱️ Looping Terjadwal Kontinu (Jeda Acak 30–60 Menit Antar Siklus)
 - **Urutan Siklus**:
   1. Task 1 (Postingan Unik) selesai untuk 6 akun kreator.
   2. Task 2 (Raid squad: Like, Retweet, Reply) selesai untuk seluruh 8 akun.
-  3. Masuk mode **Sleep / Istirahat secara acak selama 5–10 Menit (300–600 detik)** untuk menghindari deteksi pola bot secara berkala.
+  3. Masuk mode **Sleep / Istirahat secara acak selama 30–60 Menit (1800–3600 detik)** untuk menghindari deteksi pola bot secara berkala dan menjaga Risk Score minimal.
   4. Siklus berikutnya otomatis berjalan kembali dengan ID shift baru dan gambar unik.
 
 ---
