@@ -192,8 +192,9 @@ def draw_pattern(draw: ImageDraw.ImageDraw, pattern: str, w: int, h: int, color:
         draw.line([(w - 25, h - 25), (w - 25, h - 25 - L)], fill=color, width=5)
 
 
-def generate_image_for_account(account_handle: str, theme_idx: int = 0) -> str:
-    """Menghasilkan satu gambar unik secara dinamis untuk akun apa pun."""
+def generate_image_for_account(account_handle: str, theme_idx: int = 0, cycle_num: int = 1) -> str:
+    """Menghasilkan satu gambar unik secara dinamis untuk akun apa pun dengan tema visual spesifik."""
+    import time
     w, h = 1200, 675
     theme = THEME_PRESETS[theme_idx % len(THEME_PRESETS)]
     clean_handle = account_handle.lstrip("@").strip()
@@ -220,7 +221,7 @@ def generate_image_for_account(account_handle: str, theme_idx: int = 0) -> str:
     draw.rectangle([(60, card_top), (w - 60, card_top + card_h)], fill=theme["badge_bg"], outline=(40, 50, 70), width=1)
     draw.line([(60, card_top), (60, card_top + card_h)], fill=theme["primary"], width=6)
 
-    shift_num = abs(hash(clean_handle)) % 9000 + 1000
+    shift_num = abs(hash(f"{clean_handle}_{cycle_num}_{time.time()}")) % 9000 + 1000
     draw.text((85, card_top + 20), f"OPERATOR HANDLE : @{clean_handle}", fill=(255, 255, 255))
     draw.text((85, card_top + 55), f"SHIFT ASSIGNMENT: #SHILL-{shift_num}", fill=theme["primary"])
     draw.text((85, card_top + 90), f"CONSENSUS STATUS: {theme['status']}", fill=theme["secondary"])
@@ -254,7 +255,7 @@ def generate_image_for_account(account_handle: str, theme_idx: int = 0) -> str:
     draw.rectangle([(w - 250, footer_top + 35), (w - 85, footer_top + 105)], fill=theme["primary"])
     draw.text((w - 225, footer_top + 60), "100% VERIFIED", fill=(0, 0, 0))
 
-    out_file = OUT_DIR / f"shill_{clean_handle}.png"
+    out_file = OUT_DIR / f"shill_{clean_handle}_c{cycle_num}.png"
     img.save(out_file, format="PNG", quality=95)
     return str(out_file.resolve())
 

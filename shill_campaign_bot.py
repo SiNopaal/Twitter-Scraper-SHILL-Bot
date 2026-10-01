@@ -46,11 +46,15 @@ TAG = "@shillmoneyrh"
 URL = "https://shill.money/clock-in"
 
 # Generator Postingan Bebas, Organik & Unik per Akun (100% Kualifikasi Shill.Money)
-def generate_unique_post_text(account_name: str = "", cycle_num: int = 1) -> str:
-    """Menghasilkan teks postingan yang bebas, organik, dan unik untuk setiap akun,
+def generate_unique_post_text(account_name: str = "", cycle_num: int = 1, used_openers: set = None, used_contexts: set = None) -> str:
+    """Menghasilkan teks postingan yang bebas, organik, dan 100% unik tanpa duplikasi frasa antar akun,
     dengan wajib menyertakan tag @shillmoneyrh dan diakhiri Contract Address $SHILL: 0x93cfF6Dc0cf59680b8d85b9F3312a24bF1a7c1D8."""
+    if used_openers is None:
+        used_openers = set()
+    if used_contexts is None:
+        used_contexts = set()
+
     openers = [
-        # Angle Degen & SocialFi Mining
         "SocialFi is entering an exciting new meta.",
         "Grinding out another high-effort shift today.",
         "Authentic CT discussions beat passive bot farming every single time.",
@@ -74,7 +78,6 @@ def generate_unique_post_text(account_name: str = "", cycle_num: int = 1) -> str
     ]
 
     contexts = [
-        # Konten & Kualifikasi Spesifik Shill.Money
         f"Real squad quotes, insightful replies, and organic interaction drive the highest points {TAG}.",
         f"Complete identifiers paired with visual shift badges guarantee maximum scoring weight {TAG}.",
         f"The math behind the payout mechanics rewards value creators over low-effort noise {TAG}.",
@@ -101,9 +104,13 @@ def generate_unique_post_text(account_name: str = "", cycle_num: int = 1) -> str
         f"Clocking in daily and climbing the ranks! 🎯"
     ]
 
-    for _ in range(30):
-        op = random.choice(openers)
-        ctx = random.choice(contexts)
+    # Filter opsi yang belum dipakai dalam siklus ini
+    available_openers = [o for o in openers if o not in used_openers] or openers
+    available_contexts = [c for c in contexts if c not in used_contexts] or contexts
+
+    for _ in range(40):
+        op = random.choice(available_openers)
+        ctx = random.choice(available_contexts)
         cta = random.choice(ctas)
 
         style = random.choice([1, 2, 3])
@@ -116,8 +123,14 @@ def generate_unique_post_text(account_name: str = "", cycle_num: int = 1) -> str
 
         final_post = f"{body}\n\nContract Address {TICKER}: {CA}"
         if len(final_post) <= 270:
+            used_openers.add(op)
+            used_contexts.add(ctx)
             return final_post
 
+    op = available_openers[0]
+    ctx = available_contexts[0]
+    used_openers.add(op)
+    used_contexts.add(ctx)
     return f"{op} {ctx}\n\nContract Address {TICKER}: {CA}"
 
 
@@ -522,6 +535,8 @@ async def run_campaign_pipeline(cycle_num: int = 1):
     print(f"{MAGENTA}{BOLD}================================================================{RESET}\n")
 
     posts = load_campaign_posts()
+    used_openers = set()
+    used_contexts = set()
 
     for idx, acc in enumerate(all_accounts, 1):
         uname = acc.get("screen_name", "")
@@ -539,12 +554,18 @@ async def run_campaign_pipeline(cycle_num: int = 1):
             print(f"  {GREEN}✓ Akun @{clean_name} sudah memposting sebelumnya: {posts[clean_name]['tweet_url']}{RESET}\n")
             continue
 
-        tweet_content = generate_unique_post_text(account_name=clean_name, cycle_num=cycle_num)
+        # Postingan 100% berbeda tanpa kesamaan frasa antar akun
+        tweet_content = generate_unique_post_text(
+            account_name=clean_name,
+            cycle_num=cycle_num,
+            used_openers=used_openers,
+            used_contexts=used_contexts
+        )
 
-        image_file = SHILL_IMAGES_DIR / f"shill_{clean_name}.png"
-        if not image_file.exists():
-            from generate_shill_images import generate_image_for_account
-            generate_image_for_account(clean_name, idx - 1)
+        # Gambar unik dengan tema visual, palet warna, dan shift ID berbeda per akun
+        from generate_shill_images import generate_image_for_account, THEME_PRESETS
+        theme_index = (idx - 1 + (cycle_num - 1) * 3) % len(THEME_PRESETS)
+        actual_image_path = generate_image_for_account(clean_name, theme_index, cycle_num)
 
         # Luncurkan browser untuk akun ini
         async with async_playwright() as p:
@@ -571,7 +592,7 @@ async def run_campaign_pipeline(cycle_num: int = 1):
                 page=page,
                 account_name=clean_name,
                 tweet_text=tweet_content,
-                image_path=str(image_file.resolve()) if image_file.exists() else ""
+                image_path=actual_image_path
             )
 
             await browser.close()
