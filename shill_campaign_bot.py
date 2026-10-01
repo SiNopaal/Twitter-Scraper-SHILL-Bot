@@ -51,49 +51,49 @@ POST_TEMPLATES = [
         "Posts score highest when including complete identifiers (ticker, contract, and media), "
         "while scaling further through real discussion—like quotes and replies—plus transparent payout proofs.\n"
         f"{TAG}\n\n"
-        f"{TICKER}: {CA}"
+        f"Contract Address {TICKER}: {CA}"
     ),
     (
         "Social mining in Web3 done right. Real discussion, mutual squad quotes, and transparent creator paychecks beat passive spam.\n"
         f"Clocking in my shift at {URL}!\n\n"
         f"{TAG}\n"
-        f"{TICKER}: {CA}"
+        f"Contract Address {TICKER}: {CA}"
     ),
     (
         "Daily clock-in shift confirmed! Tracking every like, reply, repost, and quote on-chain.\n"
         f"Turn genuine reach into liquid yield at {URL}.\n\n"
         f"{TAG}\n"
-        f"{TICKER}: {CA}"
+        f"Contract Address {TICKER}: {CA}"
     ),
     (
         "Proof of Work meets SocialFi. The scoring algorithm rewards high-effort discussions and complete CA identifiers.\n"
         f"Securing my daily {TICKER} paycheck!\n\n"
         f"{TAG}\n"
-        f"{TICKER}: {CA}"
+        f"Contract Address {TICKER}: {CA}"
     ),
     (
         "Clock in, participate in authentic conversations, and claim your decentralized creator rewards.\n"
         f"Checking in my daily shift at {URL}!\n\n"
         f"{TAG}\n"
-        f"{TICKER}: {CA}"
+        f"Contract Address {TICKER}: {CA}"
     ),
     (
         "Why grind mindless farming when you can clock in with real discussion and get paid for measurable reach?\n"
         f"Squad shift active at {URL}!\n\n"
         f"{TAG}\n"
-        f"{TICKER}: {CA}"
+        f"Contract Address {TICKER}: {CA}"
     ),
     (
         "Decentralized wage distribution powered by smart contracts. Daily shift is officially open for creators.\n"
         "Every quote & repost counts!\n\n"
         f"{TAG}\n"
-        f"{TICKER}: {CA}"
+        f"Contract Address {TICKER}: {CA}"
     ),
     (
         f"Consistency is king in SocialFi. Just clocked in my daily shift on {URL}!\n"
         "Squad is active and pushing transparent creator rewards.\n\n"
         f"{TAG}\n"
-        f"{TICKER}: {CA}"
+        f"Contract Address {TICKER}: {CA}"
     )
 ]
 
@@ -450,8 +450,7 @@ async def run_campaign_pipeline(cycle_num: int = 1):
             continue
 
         base_template = POST_TEMPLATES[(idx - 1) % len(POST_TEMPLATES)]
-        shift_tag = f"#SHIFT-{abs(hash(clean_name + str(cycle_num))) % 9000 + 1000}"
-        tweet_content = f"{base_template}\nLog: {shift_tag}"
+        tweet_content = base_template
 
         image_file = SHILL_IMAGES_DIR / f"shill_{clean_name}.png"
         if not image_file.exists():
