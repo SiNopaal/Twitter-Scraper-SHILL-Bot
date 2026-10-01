@@ -1,0 +1,17 @@
+{
+  "active_account": "operator_alpha",
+  "accounts": {
+    "operator_alpha": {
+      "screen_name": "operator_alpha",
+      "name": "Operator Alpha",
+      "auth_token": "YOUR_AUTH_TOKEN_HERE",
+      "ct0": "YOUR_CT0_HERE"
+    },
+    "operator_beta": {
+      "screen_name": "operator_beta",
+      "name": "Operator Beta",
+      "auth_token": "YOUR_AUTH_TOKEN_HERE",
+      "ct0": "YOUR_CT0_HERE"
+    }
+  }
+}
