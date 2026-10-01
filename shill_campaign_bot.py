@@ -393,7 +393,7 @@ async def execute_tweet_engagement(
     return res
 
 
-async def run_campaign_pipeline():
+async def run_campaign_pipeline(cycle_num: int = 1):
     accs_data = load_accounts()
     all_accounts = [
         v for k, v in accs_data.get("accounts", {}).items()
@@ -436,7 +436,9 @@ async def run_campaign_pipeline():
             print(f"  {GREEN}✓ Akun @{clean_name} sudah memposting sebelumnya: {posts[clean_name]['tweet_url']}{RESET}\n")
             continue
 
-        tweet_content = POST_TEMPLATES[(idx - 1) % len(POST_TEMPLATES)]
+        base_template = POST_TEMPLATES[(idx - 1) % len(POST_TEMPLATES)]
+        shift_tag = f"#SHIFT-{abs(hash(clean_name + str(cycle_num))) % 9000 + 1000}"
+        tweet_content = f"{base_template}\nLog: {shift_tag}"
 
         image_file = SHILL_IMAGES_DIR / f"shill_{clean_name}.png"
         if not image_file.exists():
@@ -591,12 +593,23 @@ async def run_continuous_campaign(cycle_delay_seconds: int = 1800):
         print(f"{MAGENTA}{BOLD}║         🚀 MEMULAI SIKLUS KAMPANYE SHILL #{cycle:<4}                ║{RESET}")
         print(f"{MAGENTA}{BOLD}╚═══════════════════════════════════════════════════════════════╝{RESET}\n")
 
-        await run_campaign_pipeline()
+        await run_campaign_pipeline(cycle_num=cycle)
 
         print(f"\n{YELLOW}{BOLD}================================================================{RESET}")
         print(f"{YELLOW}{BOLD}⏳ SIKLUS #{cycle} SELESAI SEMPURNA!{RESET}")
         print(f"{YELLOW}{BOLD}💤 Memulai jeda istirahat siklus selama 30 MENIT ({cycle_delay_seconds} detik)...{RESET}")
         print(f"{YELLOW}{BOLD}================================================================{RESET}\n")
+
+        # Arsipkan postingan siklus ini dan bersihkan untuk siklus berikutnya
+        current_posts = load_campaign_posts()
+        if current_posts:
+            archive_file = RESULTS_DIR / f"shill_posts_cycle_{cycle}.json"
+            try:
+                with open(archive_file, "w", encoding="utf-8") as f:
+                    json.dump(current_posts, f, indent=2, ensure_ascii=False)
+            except Exception:
+                pass
+            save_campaign_posts({})
 
         # Hitung mundur jeda 30 menit
         for remaining in range(cycle_delay_seconds, 0, -60):
