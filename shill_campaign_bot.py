@@ -403,17 +403,19 @@ async def run_campaign_pipeline():
     print(f"""{CYAN}{BOLD}
 ╔═══════════════════════════════════════════════════════════════╗
 ║         🚀 SHILL.MONEY CLOCK-IN CAMPAIGN BOT                  ║
-║   1. Pembuatan 8 Postingan Unik + Identifiers + Media Grafis  ║
+║   1. Pembuatan Postingan Unik (Akun Terpilih) + Media Grafis  ║
 ║   2. Saling Interaksi Silang: Like ❤️ Retweet 🔁 Reply 💬       ║
 ╚═══════════════════════════════════════════════════════════════╝{RESET}""")
 
-    print(f"Jumlah Akun Terlibat: {len(all_accounts)} Akun Aktif\n")
+    posters = [a for a in all_accounts if a.get("can_post", True)]
+    engagers = [a for a in all_accounts if not a.get("can_post", True)]
+    print(f"Total Akun Terlibat: {len(all_accounts)} Akun Aktif (Poster: {len(posters)}, Engager Only: {len(engagers)})\n")
 
     # =========================================================================
     # PHASE 1: POSTING TWEET UNIK KE SEMUA AKUN
     # =========================================================================
     print(f"{MAGENTA}{BOLD}================================================================{RESET}")
-    print(f"{MAGENTA}{BOLD}📢 FASE 1: MEMBUAT POSTINGAN KAMPANYE $SHILL UNTUK SEMUA AKUN{RESET}")
+    print(f"{MAGENTA}{BOLD}📢 FASE 1: MEMBUAT POSTINGAN KAMPANYE $SHILL UNTUK AKUN TERPILIH{RESET}")
     print(f"{MAGENTA}{BOLD}================================================================{RESET}\n")
 
     posts = load_campaign_posts()
@@ -425,6 +427,10 @@ async def run_campaign_pipeline():
         print(f"{CYAN}{BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}")
         print(f"{CYAN}{BOLD}▶ [{idx}/{len(all_accounts)}] Akun: @{clean_name}{RESET}")
         print(f"{CYAN}{BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}")
+
+        if not acc.get("can_post", True):
+            print(f"  {YELLOW}⏩ Akun @{clean_name} dilewati dari pembuatan postingan (Mode: Engager Only).{RESET}\n")
+            continue
 
         if clean_name in posts and posts[clean_name].get("tweet_url"):
             print(f"  {GREEN}✓ Akun @{clean_name} sudah memposting sebelumnya: {posts[clean_name]['tweet_url']}{RESET}\n")
@@ -487,15 +493,22 @@ async def run_campaign_pipeline():
             print(f"{YELLOW}⏳ Jeda alami {wait_s} detik sebelum akun berikutnya memposting...{RESET}\n")
             await asyncio.sleep(wait_s)
 
+    # Filter target postingan hanya dari akun pembuat postingan aktif
+    allowed_poster_names = {
+        a.get("screen_name", "").lstrip("@").strip().lower()
+        for a in all_accounts if a.get("can_post", True)
+    }
+    raid_targets = {k: v for k, v in posts.items() if k.lower() in allowed_poster_names}
+
     print(f"\n{GREEN}{BOLD}================================================================{RESET}")
-    print(f"{GREEN}{BOLD}🎉 FASE 1 SELESAI: {len(posts)} Postingan Telah Terbit!{RESET}")
+    print(f"{GREEN}{BOLD}🎉 FASE 1 SELESAI: {len(raid_targets)} Postingan Siap di-Raid!{RESET}")
     print(f"{GREEN}{BOLD}================================================================{RESET}\n")
 
     # =========================================================================
     # PHASE 2: MUTUAL CROSS-ENGAGEMENT (RAID SQUAD)
     # =========================================================================
     print(f"{MAGENTA}{BOLD}================================================================{RESET}")
-    print(f"{MAGENTA}{BOLD}🔥 FASE 2: CROSS-ENGAGEMENT RAID (LIKE, RETWEET, REPLY, QUOTE){RESET}")
+    print(f"{MAGENTA}{BOLD}🔥 FASE 2: CROSS-ENGAGEMENT RAID (LIKE, RETWEET, REPLY){RESET}")
     print(f"{MAGENTA}{BOLD}================================================================{RESET}\n")
 
     for acc_idx, acc in enumerate(all_accounts, 1):
@@ -507,7 +520,7 @@ async def run_campaign_pipeline():
         print(f"{CYAN}{BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}\n")
 
         # Target tweet adalah tweet dari AKUN LAIN
-        other_posts = [p_data for a_name, p_data in posts.items() if a_name.lower() != clean_name.lower()]
+        other_posts = [p_data for a_name, p_data in raid_targets.items() if a_name.lower() != clean_name.lower()]
 
         if not other_posts:
             print(f"  {YELLOW}Tidak ada postingan dari akun lain untuk di-engage.{RESET}")
@@ -565,7 +578,7 @@ async def run_campaign_pipeline():
 
     print(f"\n{GREEN}{BOLD}╔═══════════════════════════════════════════════════════════════╗")
     print(f"║       🎉 SELURUH TAHAP SIKLUS KAMPANYE TELAH TUNTAS!          ║")
-    print(f"║  • 8 Postingan Unik Terbit dengan Gambar, Ticker & CA        ║")
+    print(f"║  • Postingan Unik Terbit dengan Gambar, Ticker & CA          ║")
     print(f"║  • Semua Akun Saling Like, Retweet & Reply Komentar          ║")
     print(f"╚═══════════════════════════════════════════════════════════════╝{RESET}\n")
 
