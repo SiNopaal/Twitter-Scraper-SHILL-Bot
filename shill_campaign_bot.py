@@ -46,13 +46,21 @@ TAG = "@shillmoneyrh"
 URL = "https://shill.money/clock-in"
 
 # Generator Postingan Bebas, Organik & Unik per Akun (100% Kualifikasi Shill.Money)
-def generate_unique_post_text(account_name: str = "", cycle_num: int = 1, used_openers: set = None, used_contexts: set = None) -> str:
+def generate_unique_post_text(
+    account_name: str = "",
+    cycle_num: int = 1,
+    used_openers: set = None,
+    used_contexts: set = None,
+    used_ctas: set = None
+) -> str:
     """Menghasilkan teks postingan yang bebas, organik, dan 100% unik tanpa duplikasi frasa antar akun,
     dengan wajib menyertakan tag @shillmoneyrh dan diakhiri Contract Address $SHILL: 0x93cfF6Dc0cf59680b8d85b9F3312a24bF1a7c1D8."""
     if used_openers is None:
         used_openers = set()
     if used_contexts is None:
         used_contexts = set()
+    if used_ctas is None:
+        used_ctas = set()
 
     openers = [
         "SocialFi is entering an exciting new meta.",
@@ -74,7 +82,12 @@ def generate_unique_post_text(account_name: str = "", cycle_num: int = 1, used_o
         "Clocking in daily because consistency is the fastest way up the leaderboard.",
         "Trading my daily attention and discussions for transparent on-chain rewards.",
         "Real discussions, verified hours, and measurable community reach.",
-        "The shift is active and creator rewards are running on smart contracts."
+        "The shift is active and creator rewards are running on smart contracts.",
+        "On-chain attribution makes gaming the system impossible.",
+        "Community effort turning into verifiable on-chain capital.",
+        "Real discussions deserve real compensation in Web3 SocialFi.",
+        "Building genuine signal while the smart contract handles the payout.",
+        "Decentralized creator economy in full motion today."
     ]
 
     contexts = [
@@ -90,7 +103,10 @@ def generate_unique_post_text(account_name: str = "", cycle_num: int = 1, used_o
         f"High effort threads with graphic proofs unlock top-tier attention multipliers on {TAG}.",
         f"Direct creator monetization without middlemen or opaque ad revenue cuts {TAG}.",
         f"Logged in my hours on the ledger—tracking every like, repost, and quote via {TAG}.",
-        f"Squad coordination pushing liquid reward pools directly to creators {TAG}."
+        f"Squad coordination pushing liquid reward pools directly to creators {TAG}.",
+        f"Focusing on high-signal threads to trigger the quadratic reward boost {TAG}.",
+        f"Verifying every single contribution directly on the EVM payroll ledger {TAG}.",
+        f"Consistent shift hours and high-quality engagement drive optimal rankings {TAG}."
     ]
 
     ctas = [
@@ -101,30 +117,36 @@ def generate_unique_post_text(account_name: str = "", cycle_num: int = 1, used_o
         f"Verified shift active. Let's get it! 💎",
         f"Logged in and working with the squad! 📈",
         f"Ready for today's payout distribution! ✨",
-        f"Clocking in daily and climbing the ranks! 🎯"
+        f"Clocking in daily and climbing the ranks! 🎯",
+        f"Let's make this shift count! 🤝",
+        f"Shift started, ready to earn! 🌟",
+        f"Proof of work logged on-chain. Onward! 🏁",
+        f"Time to clock in and scale the leaderboard! 📊"
     ]
 
     # Filter opsi yang belum dipakai dalam siklus ini
     available_openers = [o for o in openers if o not in used_openers] or openers
     available_contexts = [c for c in contexts if c not in used_contexts] or contexts
+    available_ctas = [c for c in ctas if c not in used_ctas] or ctas
 
-    for _ in range(40):
+    for _ in range(50):
         op = random.choice(available_openers)
         ctx = random.choice(available_contexts)
-        cta = random.choice(ctas)
+        cta = random.choice(available_ctas)
 
         style = random.choice([1, 2, 3])
         if style == 1:
             body = f"{op}\n{ctx}\n{cta}"
         elif style == 2:
-            body = f"{op} {ctx}"
+            body = f"{op} {ctx}\n{cta}"
         else:
-            body = f"{ctx}\n{cta}"
+            body = f"{op} {ctx}"
 
         final_post = f"{body}\n\nContract Address {TICKER}: {CA}"
         if len(final_post) <= 270:
             used_openers.add(op)
             used_contexts.add(ctx)
+            used_ctas.add(cta)
             return final_post
 
     op = available_openers[0]
@@ -537,6 +559,7 @@ async def run_campaign_pipeline(cycle_num: int = 1):
     posts = load_campaign_posts()
     used_openers = set()
     used_contexts = set()
+    used_ctas = set()
 
     for idx, acc in enumerate(all_accounts, 1):
         uname = acc.get("screen_name", "")
@@ -559,7 +582,8 @@ async def run_campaign_pipeline(cycle_num: int = 1):
             account_name=clean_name,
             cycle_num=cycle_num,
             used_openers=used_openers,
-            used_contexts=used_contexts
+            used_contexts=used_contexts,
+            used_ctas=used_ctas
         )
 
         # Gambar unik dengan tema visual, palet warna, dan shift ID berbeda per akun
