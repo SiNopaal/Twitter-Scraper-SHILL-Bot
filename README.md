@@ -32,14 +32,13 @@ Dirancang untuk memaksimalkan perolehan poin leaderboard secara organik dan terk
 ### 3. 🔥 Task 2: Cross-Engagement Raid Squad (Fase 2)
 - Setelah semua akun selesai mempublikasikan postingan masing-masing di Task 1, seluruh akun bergantian saling berkunjung ke postingan akun lainnya untuk melakukan:
   - ❤️ **Like** (+1 Poin)
-  - 🔁💬 **Quote Tweet** (+Poin Multiplier Tertinggi dengan `Contract address $SHILL: 0x93cfF6Dc0cf59680b8d85b9F3312a24bF1a7c1D8`)
   - 🔁 **Retweet / Repost** (+3 Poin)
   - 💬 **Contextual Reply / Komentar Kontekstual** (+2 Poin)
 
 ### 4. ⏱️ Looping Terjadwal Kontinu (Jeda Acak 5–10 Menit Antar Siklus)
 - **Urutan Siklus**:
   1. Task 1 (Postingan Unik) selesai untuk 6 akun kreator.
-  2. Task 2 (Raid squad: Like, Quote, Retweet, Reply) selesai untuk seluruh 8 akun.
+  2. Task 2 (Raid squad: Like, Retweet, Reply) selesai untuk seluruh 8 akun.
   3. Masuk mode **Sleep / Istirahat secara acak selama 5–10 Menit (300–600 detik)** untuk menghindari deteksi pola bot secara berkala.
   4. Siklus berikutnya otomatis berjalan kembali dengan ID shift baru dan gambar unik.
 

@@ -166,20 +166,8 @@ REPLY_TEMPLATES = [
     "Verified shift entry! Mutual engagement scaling up the multipliers nicely @shillmoneyrh.",
     "Great breakdown of the clock-in incentives. Adding to the discussion volume for maximum score!",
     "Contract address verified and active. The decentralized attention economy is here with $SHILL!",
-    "Logged in my hours too! Quotes and replies giving the strongest boost to the score. LFG!",
+    "Engaging and replying to boost the community score. LFG!",
     "Squad is fully clocked in today. Authentic interaction always gets rewarded on-chain!"
-]
-
-# Bank Quote Tweets (Simple & Wajib Mencantumkan Contract address $SHILL: CA)
-QUOTE_TEMPLATES = [
-    f"Supporting this verified shift! 🚀\nContract address {TICKER}: {CA}",
-    f"Clocked in and validating the squad thread! 🔥\nContract address {TICKER}: {CA}",
-    f"Proof of work social mining active. LFG! ⚡\nContract address {TICKER}: {CA}",
-    f"Amplifying genuine creator reach on-chain! 💎\nContract address {TICKER}: {CA}",
-    f"Real discussion always beats bot spam. Clock in now! ⏰\nContract address {TICKER}: {CA}",
-    f"Squad is fully clocked in and scaling reach! 📈\nContract address {TICKER}: {CA}",
-    f"Active creator shift verified on-chain. Transparent rewards! ✨\nContract address {TICKER}: {CA}",
-    f"Mutual engagement scaling up the multipliers nicely! 🎯\nContract address {TICKER}: {CA}"
 ]
 
 def load_campaign_posts() -> dict:
@@ -381,11 +369,10 @@ async def execute_tweet_engagement(
     tweet_id: str,
     tweet_url: str,
     current_account: str,
-    reply_text: str,
-    quote_text: str = ""
+    reply_text: str
 ) -> dict:
-    """Melakukan Like, Retweet, Quote, dan Reply/Komentar pada postingan target."""
-    res = {"liked": False, "retweeted": False, "quoted": False, "replied": False}
+    """Melakukan Like, Retweet, dan Reply/Komentar pada postingan target."""
+    res = {"liked": False, "retweeted": False, "replied": False}
 
     try:
         print(f"  {CYAN}🎯 Mengunjungi tweet @{author} ({tweet_url})...{RESET}", flush=True)
@@ -421,60 +408,7 @@ async def execute_tweet_engagement(
 
         await asyncio.sleep(random.uniform(2.0, 3.5))
 
-        # 2. QUOTE TWEET 🔁💬 (+Poin Tertinggi)
-        if quote_text:
-            try:
-                hist = load_engagement_history()
-                account_history = hist.get(current_account, {}).get(tweet_id, [])
-                if "QUOTE" in account_history:
-                    print(f"    🔁💬 Quote  : Sudah di-quote sebelumnya ✓", flush=True)
-                    res["quoted"] = True
-                else:
-                    rt_btn = page.locator('button[data-testid="retweet"]').first
-                    if await rt_btn.count() > 0:
-                        await rt_btn.scroll_into_view_if_needed()
-                        await rt_btn.click(force=True)
-                        await asyncio.sleep(1.0)
-
-                        quote_opt = page.locator('a[href*="/compose/post"], a[href*="/compose/quote"], div[role="menuitem"]:has-text("Quote")').first
-                        if await quote_opt.count() > 0:
-                            await quote_opt.click(force=True)
-                            await asyncio.sleep(1.5)
-
-                            dialog = page.locator('div[role="dialog"]').first
-                            if await dialog.count() > 0:
-                                q_textarea = dialog.locator('[data-testid="tweetTextarea_0"]').first
-                                await q_textarea.wait_for(state="visible", timeout=10000)
-                                await q_textarea.fill(quote_text)
-                                await asyncio.sleep(0.8)
-                                await q_textarea.press("End")
-                                await q_textarea.type(" ")
-                                await q_textarea.press("Backspace")
-                                await asyncio.sleep(0.5)
-
-                                q_send_btn = dialog.locator('[data-testid="tweetButton"]').first
-                                if await q_send_btn.count() > 0 and await q_send_btn.is_enabled():
-                                    try:
-                                        await q_send_btn.dispatch_event("click")
-                                    except Exception:
-                                        await q_send_btn.click(force=True)
-                                    await asyncio.sleep(2.5)
-                                    print(f"    🔁💬 Quote  : {GREEN}✓ Berhasil Quote Tweet (+Poin Multiplier){RESET}", flush=True)
-                                    print(f"       Preview: \"{quote_text.splitlines()[0]}...\"", flush=True)
-                                    res["quoted"] = True
-                                    save_engagement_record(current_account, tweet_id, "QUOTE")
-                        else:
-                            await page.keyboard.press("Escape")
-            except Exception as e:
-                print(f"    🔁💬 Quote  : {YELLOW}Notice ({e}){RESET}", flush=True)
-                try:
-                    await page.keyboard.press("Escape")
-                except Exception:
-                    pass
-
-            await asyncio.sleep(random.uniform(2.0, 3.5))
-
-        # 3. RETWEET / REPOST 🔁 (+3 Poin)
+        # 2. RETWEET / REPOST 🔁 (+3 Poin)
         try:
             unrt_btn = page.locator('button[data-testid="unretweet"]').first
             if await unrt_btn.count() > 0:
@@ -542,7 +476,7 @@ async def run_campaign_pipeline(cycle_num: int = 1):
 ╔═══════════════════════════════════════════════════════════════╗
 ║         🚀 SHILL.MONEY CLOCK-IN CAMPAIGN BOT                  ║
 ║   1. Pembuatan Postingan Unik (Akun Terpilih) + Media Grafis  ║
-║   2. Saling Interaksi Silang: Like ❤️ Quote 🔁💬 Retweet 🔁 Reply 💬 ║
+║   2. Saling Interaksi Silang: Like ❤️ Retweet 🔁 Reply 💬     ║
 ╚═══════════════════════════════════════════════════════════════╝{RESET}""")
 
     posters = [a for a in all_accounts if a.get("can_post", True)]
@@ -656,7 +590,7 @@ async def run_campaign_pipeline(cycle_num: int = 1):
     # PHASE 2: MUTUAL CROSS-ENGAGEMENT (RAID SQUAD)
     # =========================================================================
     print(f"{MAGENTA}{BOLD}================================================================{RESET}")
-    print(f"{MAGENTA}{BOLD}🔥 FASE 2: CROSS-ENGAGEMENT RAID (LIKE, QUOTE, RETWEET, REPLY){RESET}")
+    print(f"{MAGENTA}{BOLD}🔥 FASE 2: CROSS-ENGAGEMENT RAID (LIKE, RETWEET, REPLY){RESET}")
     print(f"{MAGENTA}{BOLD}================================================================{RESET}\n")
 
     for acc_idx, acc in enumerate(all_accounts, 1):
@@ -699,9 +633,8 @@ async def run_campaign_pipeline(cycle_num: int = 1):
                 target_id = target_p["tweet_id"]
                 target_url = target_p["tweet_url"]
 
-                # Pilih template reply dan quote acak
+                # Pilih template reply acak
                 chosen_reply = random.choice(REPLY_TEMPLATES)
-                chosen_quote = random.choice(QUOTE_TEMPLATES)
 
                 print(f"  [{p_idx}/{len(other_posts)}] Menyerang tweet @{target_author}...")
                 await execute_tweet_engagement(
@@ -710,8 +643,7 @@ async def run_campaign_pipeline(cycle_num: int = 1):
                     tweet_id=target_id,
                     tweet_url=target_url,
                     current_account=clean_name,
-                    reply_text=chosen_reply,
-                    quote_text=chosen_quote
+                    reply_text=chosen_reply
                 )
 
                 if p_idx < len(other_posts):
@@ -729,7 +661,7 @@ async def run_campaign_pipeline(cycle_num: int = 1):
     print(f"\n{GREEN}{BOLD}╔═══════════════════════════════════════════════════════════════╗")
     print(f"║       🎉 SELURUH TAHAP SIKLUS KAMPANYE TELAH TUNTAS!          ║")
     print(f"║  • Postingan Unik Terbit dengan Gambar, Ticker & CA          ║")
-    print(f"║  • Semua Akun Saling Like, Quote, Retweet & Reply Komentar          ║")
+    print(f"║  • Semua Akun Saling Like, Retweet & Reply Komentar          ║")
     print(f"╚═══════════════════════════════════════════════════════════════╝{RESET}\n")
 
 
