@@ -169,14 +169,12 @@ async def post_shill_tweet(
         if "CreateTweet" in response.url:
             try:
                 raw_text = await response.text()
-                m = re.search(r'"rest_id"\s*:\s*"(\d+)"', raw_text)
-                if m:
-                    created_tweet_id = m.group(1)
-                else:
-                    res_json = json.loads(raw_text)
-                    res = res_json.get("data", {}).get("create_tweet", {}).get("tweet_results", {}).get("result", {})
-                    if res and res.get("rest_id"):
-                        created_tweet_id = res.get("rest_id")
+                res_json = json.loads(raw_text)
+                res = res_json.get("data", {}).get("create_tweet", {}).get("tweet_results", {}).get("result", {})
+                if res.get("rest_id"):
+                    created_tweet_id = str(res.get("rest_id"))
+                elif res.get("tweet", {}).get("rest_id"):
+                    created_tweet_id = str(res.get("tweet", {}).get("rest_id"))
             except Exception:
                 pass
 
@@ -262,14 +260,15 @@ async def post_shill_tweet(
 
             resp = await resp_info.value
             raw_text = await resp.text()
-            m = re.search(r'"rest_id"\s*:\s*"(\d+)"', raw_text)
-            if m:
-                created_tweet_id = m.group(1)
-            else:
+            try:
                 res_json = json.loads(raw_text)
                 res = res_json.get("data", {}).get("create_tweet", {}).get("tweet_results", {}).get("result", {})
-                if res and res.get("rest_id"):
-                    created_tweet_id = res.get("rest_id")
+                if res.get("rest_id"):
+                    created_tweet_id = str(res.get("rest_id"))
+                elif res.get("tweet", {}).get("rest_id"):
+                    created_tweet_id = str(res.get("tweet", {}).get("rest_id"))
+            except Exception:
+                pass
         except Exception as e:
             print(f"  {YELLOW}Notice CreateTweet network capture: {e}{RESET}", flush=True)
 
