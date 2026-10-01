@@ -45,115 +45,96 @@ CA = "0x93cfF6Dc0cf59680b8d85b9F3312a24bF1a7c1D8"
 TAG = "@shillmoneyrh"
 URL = "https://shill.money/clock-in"
 
-# Generator Postingan Bebas, Organik & Unik per Akun (100% Kualifikasi Shill.Money)
+# Library 50+ Postingan Crypto-Native Organik & Unik (Bebas Pola Template, Anti-Risk Score)
+ORGANIC_SHILL_POSTS = [
+    # Kategori 1: CT Alpha & SocialFi Paradigm
+    "Traditional social media extracts 100% of your attention value and gives you ads in return. SocialFi with $SHILL flips the script by distributing actual on-chain paychecks to users who drive real discussions. That is the meta shift CT needed.",
+    "The real alpha in Web3 is verifiable attention capital. When engagement translates directly into $SHILL rewards via smart contracts, content creation becomes a transparent decentralized job.",
+    "Stop farming passive airdrops that dilute you into oblivion. Clock in, discuss real ideas, and earn liquid $SHILL on-chain with proof of contribution.",
+    "Attention has always been valuable, but centralized platforms kept all the revenue. $SHILL is proving that creators can get paid transparently on the ledger without intermediaries @shillmoneyrh.",
+    "Decentralized payroll for social creators is an inevitable evolution. The $SHILL experiment shows how community proof-of-work can sustain liquid reward pools.",
+    "Web3 monetization done right: direct creator rewards based on actual reach. Turning organic CT discussions into liquid yield with $SHILL.",
+    "SocialFi is entering an exciting new phase. Attention mining backed by verifiable on-chain payroll makes $SHILL one of the cleanest concepts on CT right now.",
+    "Real discussions deserve real compensation in Web3 SocialFi. Building genuine signal while the $SHILL smart contract handles the payout.",
+
+    # Kategori 2: Daily Shift, Clock-In & Proof of Work
+    "Another shift clocked in on https://shill.money/clock-in. Consistency on the daily leaderboard is how you maximize the proof-of-work multipliers in $SHILL.",
+    "Daily shift badge secured. Tracking verified hours and participating in high-signal discussions for the next $SHILL distribution.",
+    "Clocked in for today's creator shift. The proof of work mechanism on $SHILL makes sure every like, reply, and quote carries measurable weight.",
+    "Logging my shift on the decentralized ledger today. If you are spending hours on CT daily, you might as well clock in and earn $SHILL @shillmoneyrh.",
+    "Shift active and hours registered on-chain. Real engagement over automated noise every single time with $SHILL.",
+    "Checking into the daily attention mine at https://shill.money/clock-in. Earning on-chain yield for genuine discussions with $SHILL.",
+    "Daily reminder to clock in your shift on https://shill.money/clock-in before publishing your threads. $SHILL rewards consistency.",
+    "Treating my daily CT activity like a verified proof-of-work shift. Another productive day in the $SHILL ecosystem.",
+    "From proof of work to proof of attention. Web3 SocialFi is finding its true product-market fit with $SHILL.",
+    "Checking my shift badge and reviewing today's attention allocation. The mechanics behind $SHILL make complete sense for active creators.",
+    "Shift started, ready to earn! Let's make this shift count on $SHILL @shillmoneyrh.",
+
+    # Kategori 3: Anti-Bot & Quadratic Scoring System
+    "The beauty of the quadratic scoring algorithm in $SHILL is that mindless bot spam scores zero while thoughtful discussions trigger top multiplier tiers @shillmoneyrh.",
+    "Anti-sybil scoring is what keeps SocialFi sustainable. In $SHILL, low-effort bot templates get penalized while authentic community presence earns the highest allocation.",
+    "Notice how generic bot replies get cut by the risk score in $SHILL? Actual discussions and contextual replies are the only way to scale the leaderboard.",
+    "Quality signal over volume spam. The $SHILL risk engine penalizes copy-paste behavior, making organic CT creators the true winners.",
+    "Quadratic distribution math in $SHILL ensures reward pools flow to creators who spark genuine community threads, not bot farms.",
+    "Quadratic funding changed Web3 public goods, and now quadratic attention scoring in $SHILL is changing creator rewards. Mathematical elegance at work.",
+    "Quadratic distribution protects genuine creators from bot spam. If you're building real presence on CT, $SHILL is built for you.",
+
+    # Kategori 4: Squad Engagement & Multipliers
+    "Squad is fully locked in today. Mutual replies and meaningful discussions driving up the attention multipliers for everyone in $SHILL @shillmoneyrh.",
+    "Collaborative engagement scaling our shift multipliers nicely. Strong community coordination is the fastest way to climb the $SHILL ranks.",
+    "Supporting squad members who put effort into their shifts. When the whole community engages with high-effort content, the $SHILL ecosystem wins.",
+    "Mutual reach, thoughtful comments, and proof-of-work badges powering today's $SHILL shift. Let us keep building the signal.",
+    "Active discussions and high effort content get prioritized by the algorithm. Working with the squad to scale our reach on $SHILL @shillmoneyrh.",
+    "Squad coordination pushing liquid reward pools directly to creators. Clock in and let's work on $SHILL!",
+
+    # Kategori 5: Creator Economy & Tokenomics
+    "Direct creator monetization without platform fees or ad middlemen. That is the core value proposition behind $SHILL.",
+    "Web3 creator economy done right: transparent wage distributions calculated directly by smart contracts. The shift continues with $SHILL.",
+    "Monetizing your crypto thoughts should not depend on centralized ad revenue sharing. $SHILL connects creator reach directly to decentralized payroll.",
+    "The tokenomics behind $SHILL reward consistency and authentic reach. Daily shifts turning into liquid on-chain capital.",
+    "Why sell your attention cheap to centralized platforms? Clock in, post signal, and let the $SHILL payroll contract handle the rest.",
+    "CT conversations drive the entire crypto market. It's about time a protocol like $SHILL monetizes those discussions transparently.",
+    "Every meaningful conversation on CT adds value to the network. $SHILL ensures that value gets distributed back to the community.",
+    "Attention capital is the new liquidity. Loving how $SHILL creates direct accountability between creators and reward distribution.",
+
+    # Kategori 6: Punchy Crypto Hot Takes
+    "If you are creating crypto content without earning on-chain payroll, you are doing it wrong. Clock in and get paid in $SHILL.",
+    "Authentic reach is the real currency of Web3. $SHILL just makes the payout liquid and transparent.",
+    "High signal discussions, verified shifts, and zero bot spam. That is the standard for $SHILL @shillmoneyrh.",
+    "The decentralized attention economy is not an experiment anymore, it is a working model. Clocked in for $SHILL.",
+    "Transparent smart contract payroll > opaque centralized ad rev shares. $SHILL is setting the standard.",
+    "Building genuine presence on crypto twitter while the $SHILL smart contract tracks the proof of contribution.",
+    "Real discussions, real community reach, and real on-chain rewards. That is why we clock in daily with $SHILL.",
+    "Clock in, drop alpha, engage with the squad, and claim your share of the daily $SHILL payroll pool @shillmoneyrh."
+]
+
+# Postingan yang menyertakan CA secara natural (Hanya ~10-15% dari total library)
+NATURAL_CA_POSTS = [
+    f"Verified smart contract payroll running smoothly. Tracking verified hours and shift rewards on {TICKER} (ca: {CA}) {TAG}.",
+    f"Proof-of-work social mining with transparent EVM distribution. Contract: {CA}. Let us make this shift count {TICKER}.",
+    f"Decentralized wage allocation active on the ledger for {TICKER}. Verified contract: {CA}. Clock in and verify your shift.",
+    f"On-chain attribution makes gaming the system impossible. Smart contract verified: {CA}. Shift active on {TICKER} {TAG}."
+]
+
 def generate_unique_post_text(
     account_name: str = "",
     cycle_num: int = 1,
-    used_openers: set = None,
-    used_contexts: set = None,
-    used_ctas: set = None
+    used_posts: set = None,
+    allow_ca: bool = False
 ) -> str:
-    """Menghasilkan teks postingan yang bebas, organik, dan 100% unik tanpa duplikasi frasa antar akun,
-    dengan wajib menyertakan tag @shillmoneyrh dan diakhiri Contract Address $SHILL: 0x93cfF6Dc0cf59680b8d85b9F3312a24bF1a7c1D8."""
-    if used_openers is None:
-        used_openers = set()
-    if used_contexts is None:
-        used_contexts = set()
-    if used_ctas is None:
-        used_ctas = set()
+    """Menghasilkan teks postingan crypto-native organik yang 100% unik tanpa pola template berulang.
+    Kombinasi acak: sebagian besar tanpa CA, hanya sesekali menyertakan CA secara natural."""
+    if used_posts is None:
+        used_posts = set()
 
-    openers = [
-        "SocialFi is entering an exciting new meta.",
-        "Grinding out another high-effort shift today.",
-        "Authentic CT discussions beat passive bot farming every single time.",
-        "The decentralized attention economy is officially here.",
-        "Proof of Work meets decentralized creator paychecks.",
-        "Turning genuine reach and meaningful engagement into liquid yield.",
-        "Smart contracts don't lie—transparent wage distribution for real creators.",
-        "Why waste energy on mindless airdrop farming when you can get paid for real discussion?",
-        "Squad is fully locked in and scaling on-chain multipliers today.",
-        "Logging verified hours on-chain with proof of contribution.",
-        "Web3 monetization done right: direct creator rewards based on actual reach.",
-        "Quality engagement always wins over automated spam.",
-        "Another daily shift active—maximizing proof-of-work multipliers.",
-        "Decentralized attention mining is the cleanest way to earn in SocialFi.",
-        "Proof-of-work social mining is completely reshaping creator incentives.",
-        "Not all engagement is created equal—authentic reach is the real alpha.",
-        "Clocking in daily because consistency is the fastest way up the leaderboard.",
-        "Trading my daily attention and discussions for transparent on-chain rewards.",
-        "Real discussions, verified hours, and measurable community reach.",
-        "The shift is active and creator rewards are running on smart contracts.",
-        "On-chain attribution makes gaming the system impossible.",
-        "Community effort turning into verifiable on-chain capital.",
-        "Real discussions deserve real compensation in Web3 SocialFi.",
-        "Building genuine signal while the smart contract handles the payout.",
-        "Decentralized creator economy in full motion today."
-    ]
+    if allow_ca and random.random() < 0.6:
+        candidate_pool = [p for p in NATURAL_CA_POSTS if p not in used_posts] or NATURAL_CA_POSTS
+    else:
+        candidate_pool = [p for p in ORGANIC_SHILL_POSTS if p not in used_posts] or ORGANIC_SHILL_POSTS
 
-    contexts = [
-        f"Real squad quotes, insightful replies, and organic interaction drive the highest points {TAG}.",
-        f"Complete identifiers paired with visual shift badges guarantee maximum scoring weight {TAG}.",
-        f"The math behind the payout mechanics rewards value creators over low-effort noise {TAG}.",
-        f"Every valid interaction gets tracked transparently on the smart contract {TAG}.",
-        f"Clock in, share real thoughts, engage with the community, and claim liquid rewards {TAG}.",
-        f"Mutual quotes and thread discussions scaling up our yield multipliers nicely {TAG}.",
-        f"Checking my daily shift badge and securing my creator allocation {TAG}.",
-        f"Active discussions and high effort content get prioritized by the algorithm {TAG}.",
-        f"Turning organic CT reach into verifiable payout proofs with {TAG}.",
-        f"High effort threads with graphic proofs unlock top-tier attention multipliers on {TAG}.",
-        f"Direct creator monetization without middlemen or opaque ad revenue cuts {TAG}.",
-        f"Logged in my hours on the ledger—tracking every like, repost, and quote via {TAG}.",
-        f"Squad coordination pushing liquid reward pools directly to creators {TAG}.",
-        f"Focusing on high-signal threads to trigger the quadratic reward boost {TAG}.",
-        f"Verifying every single contribution directly on the EVM payroll ledger {TAG}.",
-        f"Consistent shift hours and high-quality engagement drive optimal rankings {TAG}."
-    ]
-
-    ctas = [
-        f"Shift live at {URL}!",
-        f"Clock in now at {URL} and let's push this reach! 🚀",
-        f"Squad clocked in. Let's work! 🔥",
-        f"Check in your hours at {URL}. LFG! ⚡",
-        f"Verified shift active. Let's get it! 💎",
-        f"Logged in and working with the squad! 📈",
-        f"Ready for today's payout distribution! ✨",
-        f"Clocking in daily and climbing the ranks! 🎯",
-        f"Let's make this shift count! 🤝",
-        f"Shift started, ready to earn! 🌟",
-        f"Proof of work logged on-chain. Onward! 🏁",
-        f"Time to clock in and scale the leaderboard! 📊"
-    ]
-
-    # Filter opsi yang belum dipakai dalam siklus ini
-    available_openers = [o for o in openers if o not in used_openers] or openers
-    available_contexts = [c for c in contexts if c not in used_contexts] or contexts
-    available_ctas = [c for c in ctas if c not in used_ctas] or ctas
-
-    for _ in range(50):
-        op = random.choice(available_openers)
-        ctx = random.choice(available_contexts)
-        cta = random.choice(available_ctas)
-
-        style = random.choice([1, 2, 3])
-        if style == 1:
-            body = f"{op}\n{ctx}\n{cta}"
-        elif style == 2:
-            body = f"{op} {ctx}\n{cta}"
-        else:
-            body = f"{op} {ctx}"
-
-        final_post = f"{body}\n\nContract Address {TICKER}: {CA}"
-        if len(final_post) <= 270:
-            used_openers.add(op)
-            used_contexts.add(ctx)
-            used_ctas.add(cta)
-            return final_post
-
-    op = available_openers[0]
-    ctx = available_contexts[0]
-    used_openers.add(op)
-    used_contexts.add(ctx)
-    return f"{op} {ctx}\n\nContract Address {TICKER}: {CA}"
+    post = random.choice(candidate_pool)
+    used_posts.add(post)
+    return post
 
 
 POST_TEMPLATES = [generate_unique_post_text() for _ in range(10)]
@@ -491,9 +472,8 @@ async def run_campaign_pipeline(cycle_num: int = 1):
     print(f"{MAGENTA}{BOLD}================================================================{RESET}\n")
 
     posts = load_campaign_posts()
-    used_openers = set()
-    used_contexts = set()
-    used_ctas = set()
+    used_posts = set()
+    ca_given = False
 
     for idx, acc in enumerate(all_accounts, 1):
         uname = acc.get("screen_name", "")
@@ -511,16 +491,21 @@ async def run_campaign_pipeline(cycle_num: int = 1):
             print(f"  {GREEN}✓ Akun @{clean_name} sudah memposting sebelumnya: {posts[clean_name]['tweet_url']}{RESET}\n")
             continue
 
-        # Postingan 100% berbeda tanpa kesamaan frasa antar akun
+        # Berikan CA secara acak hanya pada 1 akun dalam siklus (~25% probabilitas)
+        allow_ca_this_acc = False
+        if not ca_given and random.random() < 0.25:
+            allow_ca_this_acc = True
+            ca_given = True
+
+        # Postingan 100% berbeda, organik, tanpa pola template berulang
         tweet_content = generate_unique_post_text(
             account_name=clean_name,
             cycle_num=cycle_num,
-            used_openers=used_openers,
-            used_contexts=used_contexts,
-            used_ctas=used_ctas
+            used_posts=used_posts,
+            allow_ca=allow_ca_this_acc
         )
 
-        # Gambar unik dengan tema visual, palet warna, dan shift ID berbeda per akun
+        # Gambar unik dengan salah satu dari 6 layout grafis kreatif berbeda per akun
         from generate_shill_images import generate_image_for_account, THEME_PRESETS
         theme_index = (idx - 1 + (cycle_num - 1) * 3) % len(THEME_PRESETS)
         actual_image_path = generate_image_for_account(clean_name, theme_index, cycle_num)
@@ -569,10 +554,10 @@ async def run_campaign_pipeline(cycle_num: int = 1):
             else:
                 print(f"  {RED}❌ Gagal memposting untuk @{clean_name}: {t_url}{RESET}\n")
 
-        # Jeda alami antar posting akun
+        # Jeda alami anti-burst antar posting akun (anti risk score)
         if idx < len(all_accounts):
-            wait_s = random.randint(15, 25)
-            print(f"{YELLOW}⏳ Jeda alami {wait_s} detik sebelum akun berikutnya memposting...{RESET}\n")
+            wait_s = random.randint(45, 80)
+            print(f"{YELLOW}⏳ Jeda alami anti-risk {wait_s} detik sebelum akun berikutnya memposting...{RESET}\n")
             await asyncio.sleep(wait_s)
 
     # Filter target postingan hanya dari akun pembuat postingan aktif
@@ -647,20 +632,20 @@ async def run_campaign_pipeline(cycle_num: int = 1):
                 )
 
                 if p_idx < len(other_posts):
-                    inter_wait = random.randint(8, 16)
+                    inter_wait = random.randint(18, 35)
                     print(f"    ⏳ Jeda alami antar interaksi {inter_wait} detik...\n")
                     await asyncio.sleep(inter_wait)
 
             await browser.close()
 
         if acc_idx < len(all_accounts):
-            acc_wait = random.randint(20, 35)
+            acc_wait = random.randint(45, 80)
             print(f"\n{YELLOW}💤 Jeda istirahat akun {acc_wait} detik sebelum beralih ke akun berikutnya...{RESET}\n")
             await asyncio.sleep(acc_wait)
 
     print(f"\n{GREEN}{BOLD}╔═══════════════════════════════════════════════════════════════╗")
     print(f"║       🎉 SELURUH TAHAP SIKLUS KAMPANYE TELAH TUNTAS!          ║")
-    print(f"║  • Postingan Unik Terbit dengan Gambar, Ticker & CA          ║")
+    print(f"║  • Postingan Unik Terbit dengan Gambar Kreatif & $SHILL       ║")
     print(f"║  • Semua Akun Saling Like, Retweet & Reply Komentar          ║")
     print(f"╚═══════════════════════════════════════════════════════════════╝{RESET}\n")
 
