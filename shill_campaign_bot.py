@@ -45,57 +45,71 @@ CA = "0x93cfF6Dc0cf59680b8d85b9F3312a24bF1a7c1D8"
 TAG = "@shillmoneyrh"
 URL = "https://shill.money/clock-in"
 
-# 8 Postingan 100% Unik & Berbeda Sudut Pandang per Akun
-POST_TEMPLATES = [
-    # Akun 1: Gaya Analitik & Metrik Leaderboard
-    (
-        "Scoring breakdown for SocialFi: complete identifiers paired with real squad engagement "
-        "consistently achieve the strongest multiplier proofs on-chain. Validating today's hours with @shillmoneyrh!\n\n"
-        f"Contract Address {TICKER}: {CA}"
-    ),
-    # Akun 2: Gaya Degen Web3 Shift Check-In
-    (
-        f"Clocked in and ready to work. Web3 attention mining is replacing passive farming—pure measurable engagement on-chain.\n"
-        f"Shift live at {URL}! @shillmoneyrh\n\n"
-        f"Contract Address {TICKER}: {CA}"
-    ),
-    # Akun 3: Gaya Komunitas Anti-Bot & Proof of Work
-    (
-        "Bot spam gets zero reach. Genuine replies and mutual quotes always dominate the algorithm.\n"
-        "Validated proof-of-work entry for today's hours with @shillmoneyrh. Real social mining wins!\n\n"
-        f"Contract Address {TICKER}: {CA}"
-    ),
-    # Akun 4: Gaya Transparansi Smart Contract & Wage Ledger
-    (
-        "Transparent wage distribution backed directly by verifiable smart contracts.\n"
-        "Checking my daily clock-in badge and securing my allocation on @shillmoneyrh!\n\n"
-        f"Contract Address {TICKER}: {CA}"
-    ),
-    # Akun 5: Gaya Creator Economy & Payout Multiplier
-    (
-        "The creator economy is shifting to decentralized proof-of-contribution.\n"
-        "Every quote, discussion, and like translates directly into earned yield on @shillmoneyrh.\n\n"
-        f"Contract Address {TICKER}: {CA}"
-    ),
-    # Akun 6: Gaya Bullish Momentum & High Effort Social Mining
-    (
-        "Proof of Work SocialFi is gaining serious traction. High effort threads with complete CA identifiers get prioritized by the scoring contract @shillmoneyrh.\n"
-        "Let's push this reach! 🚀\n\n"
-        f"Contract Address {TICKER}: {CA}"
-    ),
-    # Akun 7: Gaya Daily Shift Routine & Leaderboard Climb
-    (
-        f"Another day, another verified shift on the books. Don't sleep on clocking in daily at {URL}!\n"
-        "Verified operator shift active with @shillmoneyrh.\n\n"
-        f"Contract Address {TICKER}: {CA}"
-    ),
-    # Akun 8: Gaya Tokenomics & Attention Economy Architecture
-    (
-        "Decentralized attention economics in action: turning organic community discussions into liquid on-chain yield.\n"
-        "Fully locked in with @shillmoneyrh.\n\n"
-        f"Contract Address {TICKER}: {CA}"
-    )
-]
+# Generator Postingan Bebas, Organik & Unik per Akun
+def generate_unique_post_text(account_name: str = "", cycle_num: int = 1) -> str:
+    """Menghasilkan teks postingan yang bebas, organik, dan unik untuk setiap akun,
+    dengan wajib menyertakan tag @shillmoneyrh dan diakhiri Contract Address $SHILL: 0x93cfF6Dc0cf59680b8d85b9F3312a24bF1a7c1D8."""
+    openers = [
+        "SocialFi is entering an exciting new meta.",
+        "Grinding out another high-effort shift today.",
+        "Authentic CT discussions beat passive bot farming every single time.",
+        "The decentralized attention economy is officially here.",
+        "Consistency is everything when scaling your leaderboard score.",
+        "Proof of Work meets decentralized creator paychecks.",
+        "Turning genuine reach and meaningful engagement into liquid yield.",
+        "Smart contracts don't lie—transparent wage distribution for real creators.",
+        "Why waste energy on mindless farming when you can get rewarded for real discussion?",
+        "Squad is fully locked in and scaling on-chain multipliers today.",
+        "Logging verified hours on-chain with proof of contribution.",
+        "Web3 monetization done right: direct creator rewards based on actual reach.",
+        "Quality engagement always wins over automated spam.",
+        "Another daily shift active—maximizing proof-of-work multipliers.",
+        "Decentralized attention mining is the cleanest way to earn in SocialFi."
+    ]
+
+    contexts = [
+        f"Real squad quotes, insightful replies, and organic interaction drive the highest points {TAG}.",
+        f"Complete identifiers paired with visual shift badges guarantee maximum scoring weight {TAG}.",
+        f"The math behind the payout mechanics rewards value creators over low-effort noise {TAG}.",
+        f"Every valid interaction gets tracked transparently on the smart contract {TAG}.",
+        f"Clock in, share real thoughts, engage with the community, and claim liquid rewards {TAG}.",
+        f"Mutual quotes and thread discussions scaling up our yield multipliers nicely {TAG}.",
+        f"Checking my daily shift badge and securing my creator allocation {TAG}.",
+        f"Active discussions and high effort content get prioritized by the algorithm {TAG}.",
+        f"Turning organic CT reach into verifiable payout proofs with {TAG}."
+    ]
+
+    ctas = [
+        f"Shift live at {URL}!",
+        f"Clock in now at {URL} and let's push this reach! 🚀",
+        f"Squad clocked in. Let's work! 🔥",
+        f"Check in your hours at {URL}. LFG! ⚡",
+        f"Verified shift active. Let's get it! 💎",
+        f"Logged in and working with the squad! 📈"
+    ]
+
+    for _ in range(25):
+        op = random.choice(openers)
+        ctx = random.choice(contexts)
+        cta = random.choice(ctas)
+
+        style = random.choice([1, 2, 3])
+        if style == 1:
+            body = f"{op}\n{ctx}\n{cta}"
+        elif style == 2:
+            body = f"{op} {ctx}"
+        else:
+            body = f"{ctx}\n{cta}"
+
+        final_post = f"{body}\n\nContract Address {TICKER}: {CA}"
+        if len(final_post) <= 270:
+            return final_post
+
+    # Fallback jika panjang
+    return f"{op} {ctx}\n\nContract Address {TICKER}: {CA}"
+
+
+POST_TEMPLATES = [generate_unique_post_text() for _ in range(10)]
 
 # Bank Komentar / Replies yang Natural & Kontekstual
 REPLY_TEMPLATES = [
@@ -513,8 +527,7 @@ async def run_campaign_pipeline(cycle_num: int = 1):
             print(f"  {GREEN}✓ Akun @{clean_name} sudah memposting sebelumnya: {posts[clean_name]['tweet_url']}{RESET}\n")
             continue
 
-        base_template = POST_TEMPLATES[(idx - 1) % len(POST_TEMPLATES)]
-        tweet_content = base_template
+        tweet_content = generate_unique_post_text(account_name=clean_name, cycle_num=cycle_num)
 
         image_file = SHILL_IMAGES_DIR / f"shill_{clean_name}.png"
         if not image_file.exists():
