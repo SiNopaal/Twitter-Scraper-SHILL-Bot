@@ -249,9 +249,13 @@ async def post_shill_tweet(
 
         if await send_btn.is_enabled():
             print(f"  {YELLOW}🚀 Mengirim tweet ke timeline...{RESET}", flush=True)
-            await send_btn.click()
+            try:
+                await send_btn.dispatch_event("click")
+            except Exception:
+                await send_btn.click(force=True)
         else:
             print(f"  {YELLOW}🚀 Mengirim via Ctrl+Enter...{RESET}", flush=True)
+            await textarea.focus()
             await page.keyboard.press("Control+Enter")
 
         # Tunggu konfirmasi CreateTweet
