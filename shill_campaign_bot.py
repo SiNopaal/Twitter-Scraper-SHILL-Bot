@@ -109,15 +109,16 @@ REPLY_TEMPLATES = [
     "Squad is fully clocked in today. Authentic interaction always gets rewarded on-chain!"
 ]
 
-# Bank Quote Tweets
+# Bank Quote Tweets (Simple & Wajib Mencantumkan Contract address $SHILL: CA)
 QUOTE_TEMPLATES = [
-    "Squad clocked in! The attention economy meta is officially here with $SHILL. Verified shift with @shillmoneyrh! 🚀",
-    "Amplifying this! High effort posts with complete CA identifiers and media proofs deserve maximum reach. $SHILL to the moon! 💎",
-    "Proof of Work social mining at its finest. Checking in my shift and boosting the community! @shillmoneyrh $SHILL 🔥",
-    "Real discussions, transparent creator paychecks, and active on-chain tracking. Clock in right now at https://shill.money/clock-in! ⏰",
-    "Supporting the squad! The math behind like, repost, and quote multipliers is unmatched. Let's send $SHILL higher! 📈",
-    "Full identifiers locked: $SHILL 0x93cfF6Dc0cf59680b8d85b9F3312a24bF1a7c1D8. Verified creator shift in progress! ⚡",
-    "Quality engagement over mindless farming. Loving what @shillmoneyrh is building for creator monetization! 🎯"
+    f"Supporting this verified shift! 🚀\nContract address {TICKER}: {CA}",
+    f"Clocked in and validating the squad thread! 🔥\nContract address {TICKER}: {CA}",
+    f"Proof of work social mining active. LFG! ⚡\nContract address {TICKER}: {CA}",
+    f"Amplifying genuine creator reach on-chain! 💎\nContract address {TICKER}: {CA}",
+    f"Real discussion always beats bot spam. Clock in now! ⏰\nContract address {TICKER}: {CA}",
+    f"Squad is fully clocked in and scaling reach! 📈\nContract address {TICKER}: {CA}",
+    f"Active creator shift verified on-chain. Transparent rewards! ✨\nContract address {TICKER}: {CA}",
+    f"Mutual engagement scaling up the multipliers nicely! 🎯\nContract address {TICKER}: {CA}"
 ]
 
 def load_campaign_posts() -> dict:
@@ -310,10 +311,11 @@ async def execute_tweet_engagement(
     tweet_id: str,
     tweet_url: str,
     current_account: str,
-    reply_text: str
+    reply_text: str,
+    quote_text: str = ""
 ) -> dict:
-    """Melakukan Like, Retweet, dan Reply/Komentar pada postingan target."""
-    res = {"liked": False, "retweeted": False, "replied": False}
+    """Melakukan Like, Retweet, Quote, dan Reply/Komentar pada postingan target."""
+    res = {"liked": False, "retweeted": False, "quoted": False, "replied": False}
 
     try:
         print(f"  {CYAN}🎯 Mengunjungi tweet @{author} ({tweet_url})...{RESET}", flush=True)
@@ -349,7 +351,60 @@ async def execute_tweet_engagement(
 
         await asyncio.sleep(random.uniform(2.0, 3.5))
 
-        # 2. RETWEET / REPOST 🔁 (+3 Poin)
+        # 2. QUOTE TWEET 🔁💬 (+Poin Tertinggi)
+        if quote_text:
+            try:
+                hist = load_engagement_history()
+                account_history = hist.get(current_account, {}).get(tweet_id, [])
+                if "QUOTE" in account_history:
+                    print(f"    🔁💬 Quote  : Sudah di-quote sebelumnya ✓", flush=True)
+                    res["quoted"] = True
+                else:
+                    rt_btn = page.locator('button[data-testid="retweet"]').first
+                    if await rt_btn.count() > 0:
+                        await rt_btn.scroll_into_view_if_needed()
+                        await rt_btn.click(force=True)
+                        await asyncio.sleep(1.0)
+
+                        quote_opt = page.locator('a[href*="/compose/post"], a[href*="/compose/quote"], div[role="menuitem"]:has-text("Quote")').first
+                        if await quote_opt.count() > 0:
+                            await quote_opt.click(force=True)
+                            await asyncio.sleep(1.5)
+
+                            dialog = page.locator('div[role="dialog"]').first
+                            if await dialog.count() > 0:
+                                q_textarea = dialog.locator('[data-testid="tweetTextarea_0"]').first
+                                await q_textarea.wait_for(state="visible", timeout=10000)
+                                await q_textarea.fill(quote_text)
+                                await asyncio.sleep(0.8)
+                                await q_textarea.press("End")
+                                await q_textarea.type(" ")
+                                await q_textarea.press("Backspace")
+                                await asyncio.sleep(0.5)
+
+                                q_send_btn = dialog.locator('[data-testid="tweetButton"]').first
+                                if await q_send_btn.count() > 0 and await q_send_btn.is_enabled():
+                                    try:
+                                        await q_send_btn.dispatch_event("click")
+                                    except Exception:
+                                        await q_send_btn.click(force=True)
+                                    await asyncio.sleep(2.5)
+                                    print(f"    🔁💬 Quote  : {GREEN}✓ Berhasil Quote Tweet (+Poin Multiplier){RESET}", flush=True)
+                                    print(f"       Preview: \"{quote_text.splitlines()[0]}...\"", flush=True)
+                                    res["quoted"] = True
+                                    save_engagement_record(current_account, tweet_id, "QUOTE")
+                        else:
+                            await page.keyboard.press("Escape")
+            except Exception as e:
+                print(f"    🔁💬 Quote  : {YELLOW}Notice ({e}){RESET}", flush=True)
+                try:
+                    await page.keyboard.press("Escape")
+                except Exception:
+                    pass
+
+            await asyncio.sleep(random.uniform(2.0, 3.5))
+
+        # 3. RETWEET / REPOST 🔁 (+3 Poin)
         try:
             unrt_btn = page.locator('button[data-testid="unretweet"]').first
             if await unrt_btn.count() > 0:
@@ -375,7 +430,7 @@ async def execute_tweet_engagement(
 
         await asyncio.sleep(random.uniform(2.0, 3.5))
 
-        # 3. REPLY / COMMENT 💬 (+2 Poin)
+        # 4. REPLY / COMMENT 💬 (+2 Poin)
         try:
             reply_area = page.locator('[data-testid="tweetTextarea_0"]').first
             if await reply_area.count() > 0:
@@ -417,7 +472,7 @@ async def run_campaign_pipeline(cycle_num: int = 1):
 ╔═══════════════════════════════════════════════════════════════╗
 ║         🚀 SHILL.MONEY CLOCK-IN CAMPAIGN BOT                  ║
 ║   1. Pembuatan Postingan Unik (Akun Terpilih) + Media Grafis  ║
-║   2. Saling Interaksi Silang: Like ❤️ Retweet 🔁 Reply 💬       ║
+║   2. Saling Interaksi Silang: Like ❤️ Quote 🔁💬 Retweet 🔁 Reply 💬 ║
 ╚═══════════════════════════════════════════════════════════════╝{RESET}""")
 
     posters = [a for a in all_accounts if a.get("can_post", True)]
@@ -522,7 +577,7 @@ async def run_campaign_pipeline(cycle_num: int = 1):
     # PHASE 2: MUTUAL CROSS-ENGAGEMENT (RAID SQUAD)
     # =========================================================================
     print(f"{MAGENTA}{BOLD}================================================================{RESET}")
-    print(f"{MAGENTA}{BOLD}🔥 FASE 2: CROSS-ENGAGEMENT RAID (LIKE, RETWEET, REPLY){RESET}")
+    print(f"{MAGENTA}{BOLD}🔥 FASE 2: CROSS-ENGAGEMENT RAID (LIKE, QUOTE, RETWEET, REPLY){RESET}")
     print(f"{MAGENTA}{BOLD}================================================================{RESET}\n")
 
     for acc_idx, acc in enumerate(all_accounts, 1):
@@ -565,8 +620,9 @@ async def run_campaign_pipeline(cycle_num: int = 1):
                 target_id = target_p["tweet_id"]
                 target_url = target_p["tweet_url"]
 
-                # Pilih template reply acak
+                # Pilih template reply dan quote acak
                 chosen_reply = random.choice(REPLY_TEMPLATES)
+                chosen_quote = random.choice(QUOTE_TEMPLATES)
 
                 print(f"  [{p_idx}/{len(other_posts)}] Menyerang tweet @{target_author}...")
                 await execute_tweet_engagement(
@@ -575,7 +631,8 @@ async def run_campaign_pipeline(cycle_num: int = 1):
                     tweet_id=target_id,
                     tweet_url=target_url,
                     current_account=clean_name,
-                    reply_text=chosen_reply
+                    reply_text=chosen_reply,
+                    quote_text=chosen_quote
                 )
 
                 if p_idx < len(other_posts):
@@ -593,7 +650,7 @@ async def run_campaign_pipeline(cycle_num: int = 1):
     print(f"\n{GREEN}{BOLD}╔═══════════════════════════════════════════════════════════════╗")
     print(f"║       🎉 SELURUH TAHAP SIKLUS KAMPANYE TELAH TUNTAS!          ║")
     print(f"║  • Postingan Unik Terbit dengan Gambar, Ticker & CA          ║")
-    print(f"║  • Semua Akun Saling Like, Retweet & Reply Komentar          ║")
+    print(f"║  • Semua Akun Saling Like, Quote, Retweet & Reply Komentar          ║")
     print(f"╚═══════════════════════════════════════════════════════════════╝{RESET}\n")
 
 
